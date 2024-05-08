@@ -1,6 +1,6 @@
 from typing import Union, Any, List
 from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from src.models.models import *
 
@@ -11,7 +11,7 @@ app = FastAPI()
 
 @app.get("/projects/{project}/datasources")  # response_model=List[DataSource]) TODO map to pydantic
 async def get_datasources(project: str, db: Session = Depends(get_db)):
-    return [db.query(Project).filter(Project.name == project).one_or_none()]
+    return [db.query(DataSourceDB).options(selectinload(DataSourceDB.attributes)).all()]  # TODO update model to include project name
 
 
 @app.get("/projects/{project}/datasources/{data_source_id}")
@@ -65,14 +65,14 @@ async def create_project(project: Project, db: Session = Depends(get_db)):
 
 @app.post("/datasource", response_model=DataSource)
 async def create_datasource(data_source_input: DataSource, db: Session = Depends(get_db)):
-    data_source = DataSource(
+    data_source = DataSourceDB(
         display_text=data_source_input.display_text,
         guid=data_source_input.guid,
         last_modified_ts=data_source_input.last_modified_ts,
         status=data_source_input.status,
         type_name=data_source_input.type_name,
         version=data_source_input.version,
-        attributes=DataSourceAttributes(**data_source_input.attributes.dict())
+        attributes=DataSourceAttributesDB(**data_source_input.attributes.dict())
     )
     db.add(data_source)
     db.commit()

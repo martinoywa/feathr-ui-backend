@@ -18,10 +18,12 @@ http://127.0.0.1:8000/docs
 # What's working
 Here's a markdown table with the provided endpoint names and their status:
 
-| Endpoint Name                 | Status |
-|-------------------------------|-------|
-| /projects  (GET)              |   ✅  |
-| /projects  (POST)             |   ✅  |
+| Endpoint Name                | Status             |
+|------------------------------|--------------------|
+| /projects  (GET)             | ✅                  |
+| /projects  (POST)            | ✅                  |
+| /projects/{project}/datasources           | :heavy_minus_sign: |
+| /datasource           | :heavy_minus_sign: |
 
 Let me know if you need any adjustments!
 

@@ -66,24 +66,25 @@ class Feature(BaseModel):
     version: str
 
 
+# TODO model relationship between projects and datasources
 class DataSourceAttributes(BaseModel):
-    eventTimestampColumn: str
+    event_timestamp_column: str
     name: str
     path: str
     preprocessing: str
-    qualifiedName: str
-    tags: List[str]
-    timestampFormat: str
+    qualified_name: str
+    # tags: List[str]
+    timestamp_format: str
     type: str
 
 
 class DataSource(BaseModel):
     attributes: DataSourceAttributes
-    displayText: str
+    display_text: str
     guid: str
-    lastModifiedTS: str
+    last_modified_ts: str
     status: str
-    typeName: str
+    type_name: str
     version: str
 
 

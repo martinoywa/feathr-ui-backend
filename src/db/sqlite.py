@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, ForeignKey, String
+from sqlalchemy import create_engine, Column, Integer, ForeignKey, String, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -9,6 +9,10 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+# association_table = Table('data_source_tag_association', Base.metadata,
+#     Column('data_source_attributes_id', Integer, ForeignKey('data_source_attributes.id')),
+#     Column('tag_id', Integer, ForeignKey('tags.id'))
+# )
 
 
 class ProjectDB(Base):
@@ -16,6 +20,12 @@ class ProjectDB(Base):
 
     name = Column("name", String, primary_key=True)
 
+
+# class Tags(Base):
+#     __tablename__ = "tags"
+#
+#     id = Column(Integer, primary_key=True, index=True)
+#     name = Column(String, unique=True, index=True)
 
 class DataSourceAttributesDB(Base):
     __tablename__ = "data_source_attributes"
@@ -32,6 +42,8 @@ class DataSourceAttributesDB(Base):
 
     data_source = relationship("DataSourceDB", back_populates="attributes")
 
+    # tags = relationship("Tags", secondary=association_table, back_populates="data_source")
+
 
 class DataSourceDB(Base):
     __tablename__ = "data_sources"
@@ -44,7 +56,7 @@ class DataSourceDB(Base):
     type_name = Column("type_name", String)
     version = Column(String)
 
-    attributes = relationship("DataSourceAttributesDB", back_populates="data_source")
+    attributes = relationship("DataSourceAttributesDB", back_populates="data_source", uselist=False)
 
 # create tables
 Base.metadata.create_all(engine)
